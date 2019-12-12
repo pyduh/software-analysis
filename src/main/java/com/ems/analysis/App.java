@@ -81,8 +81,23 @@ public class App
 			// Contando a quantidade de filhos diretos:
 			_data.put("childs", Util.getDirectChildrens(_class.getReference()));
 			
-			Util.getCoupled(_class.getReference(), "org.apache");
+			// Pegando as classes que são chamadas dentros dos métodos:
+			_data.put("coupled", Util.getCbo(_class.getReference(), "org.apache"));
 			
+			_data.put("loc", Util.getLoc(_class.getReference()));
+			_data.put("noda", Util.getNoda(_class.getReference()));
+			_data.put("nopa", Util.getNopa(_class.getReference()));
+			_data.put("nopra", Util.getNopra(_class.getReference()));
+			_data.put("nodm", Util.getNodm(_class.getReference()));
+			_data.put("nopm", Util.getNopm(_class.getReference()));
+			_data.put("noprm", Util.getNoprm(_class.getReference()));
+
+
+			//_data.put("rfc", Util.getRfc(_class.getReference(), "org.apache"));
+			
+			_data.put("fanin", Util.getFanin(_class.getReference(), classes, "org.apache"));
+			_data.put("fanout", Util.getFanout(_class.getReference(), "org.apache"));
+
 			System.out.println(_data.toString());
 			
 			// Adicionando as métricas para cada classe
@@ -126,7 +141,8 @@ public class App
         
         
         SpoonAPI spoon_api = new Launcher();
-
+        HashMap classes_processed = null;
+        
 	     // path can be a folder or a file
 	     // addInputResource can be called several times
         spoon_api.addInputResource(commons_path); 
@@ -141,36 +157,9 @@ public class App
 	     // Carregando as classes do Projeto:
 	     Collection<CtClass<?>> classes = getAllValidClasses(model);
 	     
-	     processClasses(classes);
-	     //getMethodByClass(classes.iterator().next());
+	     classes_processed = processClasses(classes);
 	     
-	     /*
-	     for (CtClass<?> obj : classes) {
-	    	 System.out.println( obj.getQualifiedName() );
-	     }
-	     
-	     for (CtPackage obj : packages) {
-	    	 System.out.println( obj.getSimpleName() );
-	     }
-	    		
-	     
-	     System.out.println( model.getAllModules());
-
-	     Collection<CtType<?>> types = model.getAllTypes();
-	     
-	     System.out.println( types.isEmpty());
-	     
-	     for (CtType<?> type : types) {
-	    	 System.out.println( type );
-	    	 if (!type.isShadow()) {
-	    		 for (CtTypeReference<?> referredType: type.getReferencedTypes()) {
-	    			 System.out.println( referredType );
-	    		 }
-	    	 }
-	     }
-	     System.out.println( model.getAllPackages().isEmpty() );
-	     */
-	     
+	     Util.saveJson(classes_processed);
 
     }
 }
