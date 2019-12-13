@@ -59,7 +59,7 @@ public class Util {
 	 */
 	public static Map<String, Integer> getCbo(CtTypeReference<?> type, String couplePrefix) {
 		Collection<CtFieldReference<?>> fields = type.getDeclaration().getAllFields();
-		Collection<CtMethod<?>> methods = type.getDeclaration().getAllMethods();
+		Collection<CtMethod<?>> methods = type.getDeclaration().getMethods();
 		Collection<CtParameter<?>> parameters;
 		Collection<CtStatement> code;
 
@@ -134,6 +134,7 @@ public class Util {
 
 	}
 
+	
 	public static Map<String, Integer> getRfc(CtTypeReference<?> type, String couplePrefix) {
 		Collection<CtMethod<?>> methods = type.getDeclaration().getAllMethods();
 
@@ -166,8 +167,8 @@ public class Util {
 	 * @param type
 	 * @return
 	 */
-	public static Integer getNoda(CtTypeReference<?> type) {
-		return type.getDeclaration().getFields().size();
+	public static Integer getNoda(CtClass<?> type) {
+		return type.getFields().size();
 	}
 
 	/**
@@ -176,8 +177,8 @@ public class Util {
 	 * @param type
 	 * @return
 	 */
-	public static Integer getNopa(CtTypeReference<?> type) {
-		Collection<CtField<?>> fields = type.getDeclaration().getFields();
+	public static Integer getNopa(CtClass<?> type) {
+		Collection<CtField<?>> fields = type.getFields();
 		Integer count = 0;
 
 		for (CtField<?> field : fields) {
@@ -194,8 +195,8 @@ public class Util {
 	 * @param type
 	 * @return
 	 */
-	public static Integer getNopra(CtTypeReference<?> type) {
-		Collection<CtField<?>> fields = type.getDeclaration().getFields();
+	public static Integer getNopra(CtClass<?> type) {
+		Collection<CtField<?>> fields = type.getFields();
 		Integer count = 0;
 
 		for (CtField<?> field : fields) {
@@ -212,8 +213,8 @@ public class Util {
 	 * @param type
 	 * @return
 	 */
-	public static Integer getNodm(CtTypeReference<?> type) {
-		return type.getDeclaration().getMethods().size();
+	public static Integer getNodm(CtClass<?> type) {
+		return type.getMethods().size();
 
 	}
 
@@ -223,8 +224,8 @@ public class Util {
 	 * @param type
 	 * @return
 	 */
-	public static Integer getNopm(CtTypeReference<?> type) {
-		Collection<CtMethod<?>> methods = type.getDeclaration().getMethods();
+	public static Integer getNopm(CtClass<?> type) {
+		Collection<CtMethod<?>> methods = type.getMethods();
 		Integer count = 0;
 
 		for (CtMethod<?> method : methods) {
@@ -400,6 +401,7 @@ public class Util {
 
 	}
 
+
 	private static String getFullInheritanceTree(CtTypeReference<?> type) {
 		if (type.isShadow() || type.getSuperclass() == null)
 			return "";
@@ -407,11 +409,14 @@ public class Util {
 		return type.getSimpleName() + "." + getFullInheritanceTree(type.getSuperclass());
 	}
 
-	public static void saveJson(HashMap input_data) {
+
+	public static void saveJson(HashMap input_data, String file_name) {
+		System.out.println("Salvando o hashmap.");
+		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
-			mapper.writeValue(new File("./"), input_data);
+			mapper.writeValue(new File(file_name + ".json"), input_data);
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -29,12 +29,7 @@ public class App
 	private int verbose = 1;
 	
 	private static final String commons_path = "/home/eduardo/Documentos/ems/java-project/src/projects/commons-collections-master/src/main/java/org/apache/commons/collections4";
-	private static final String x_stream_path = "/java-project/src/projects/xstream-v-1.4.x";
-	
-	
-	private static void setPackageInformations() {
-		
-	}
+	private static final String x_stream_path = "/home/eduardo/Documentos/ems/java-project/src/projects/xstream-v-1.4.x/xstream/src/java/com/thoughtworks/xstream";
 	
 	
 	public static Collection<CtClass<?>> getAllClasses(CtModel model) {
@@ -60,7 +55,7 @@ public class App
 	}
 	
 	
-	private static HashMap processClasses(Collection<CtClass<?>> classes) {
+	private static HashMap processClasses(Collection<CtClass<?>> classes, String prefix) {
 		HashMap<String, HashMap> classesInformations = new HashMap();
 		
 		
@@ -82,32 +77,33 @@ public class App
 			_data.put("childs", Util.getDirectChildrens(_class.getReference()));
 			
 			// Pegando as classes que são chamadas dentros dos métodos:
-			_data.put("coupled", Util.getCbo(_class.getReference(), "org.apache"));
+			_data.put("coupled", Util.getCbo(_class.getReference(), prefix)); // "org.apache"
 			
 			_data.put("loc", Util.getLoc(_class.getReference()));
-			_data.put("noda", Util.getNoda(_class.getReference()));
-			_data.put("nopa", Util.getNopa(_class.getReference()));
-			_data.put("nopra", Util.getNopra(_class.getReference()));
-			_data.put("nodm", Util.getNodm(_class.getReference()));
-			_data.put("nopm", Util.getNopm(_class.getReference()));
+			_data.put("noda", Util.getNoda(_class));
+			_data.put("nopa", Util.getNopa(_class));
+			_data.put("nopra", Util.getNopra(_class));
+			_data.put("nodm", Util.getNodm(_class));
+			_data.put("nopm", Util.getNopm(_class));
 			_data.put("noprm", Util.getNoprm(_class.getReference()));
 
 
 			//_data.put("rfc", Util.getRfc(_class.getReference(), "org.apache"));
 			
-			_data.put("fanin", Util.getFanin(_class.getReference(), classes, "org.apache"));
-			_data.put("fanout", Util.getFanout(_class.getReference(), "org.apache"));
+			_data.put("fanin", Util.getFanin(_class.getReference(), classes, prefix));
+			_data.put("fanout", Util.getFanout(_class.getReference(), prefix));
 
 			System.out.println(_data.toString());
 			
 			// Adicionando as métricas para cada classe
 			classesInformations.put(_class.getSimpleName(), _data);
 			
-			System.out.println("\n\n");
+			System.out.println("\n\nTerminado\n\n");
 		}
 		
 		return classesInformations;
 	}
+	
 	
 	/**
 	 * Função para fazer o cálculo WMC: Weighted Methods per Class. Ou seja, o número de métodos em uma classe
@@ -145,7 +141,7 @@ public class App
         
 	     // path can be a folder or a file
 	     // addInputResource can be called several times
-        spoon_api.addInputResource(commons_path); 
+        spoon_api.addInputResource(x_stream_path); 
         spoon_api.getEnvironment().setNoClasspath(true);
         spoon_api.getEnvironment().setComplianceLevel(7);
         spoon_api.buildModel();
@@ -157,9 +153,12 @@ public class App
 	     // Carregando as classes do Projeto:
 	     Collection<CtClass<?>> classes = getAllValidClasses(model);
 	     
-	     classes_processed = processClasses(classes);
+	     classes_processed = processClasses(classes, "com.thoughtworks.xstream");
+		
+	     System.out.println(classes_processed.toString());
+
 	     
-	     Util.saveJson(classes_processed);
+	     Util.saveJson(classes_processed, "x_stream");
 
     }
 }
