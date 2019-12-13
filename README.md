@@ -1,4 +1,4 @@
-# Implementação da Compreensão de Softwares 
+# Compreensão de Software
 
 Trabalho para a disciplina de Manutenção e Evolução da Universidade Federal do Ceará.
 
@@ -12,7 +12,6 @@ O trabalho consiste em uma implementação, com Java e Spoon, de funções extra
   <img src="http://knowledgemanagementdepot.com/wp-content/uploads/2017/11/Metrics.png" alt="Metrics"/>
 </p>
 
-Como solicitado na avaliação, foram desenvolvidos quatro tipos de clientes. Sendo estes escolhidos no ato da chamada do `client.py`, na raiz do projeto. 
 
 
 ### Métricas
